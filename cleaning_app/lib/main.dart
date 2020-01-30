@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'models/Name.dart';
 import 'screens/locations/locations.dart';
 import 'screens/locationDetail/LocationDetail.dart';
 import 'screens/detailDescription/DetailDescription.dart';
+import 'screens/login/login.dart';
 import 'style.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final NameModel _model = NameModel();
+
+    return ScopedModel<NameModel>(
+      model: _model,
+      child:
+      MaterialApp(
       initialRoute: '/',
       onGenerateRoute: _routes(),
       theme: _theme(),
+    ),
     );
   }
 
@@ -22,6 +32,9 @@ class MyApp extends StatelessWidget {
       Widget screen;
       switch (settings.name) {
         case '/':
+          screen = Login();
+          break;
+        case '/location':
           screen = Locations();
           break;
         case '/cleaningDetails':

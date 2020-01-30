@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'imageBanner.dart';
 import 'TextSection.dart';
 import '../../models/Location.dart';
+import '../../models/Name.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 
 class LocationDetail extends StatelessWidget {
   final int _locationID;
@@ -12,23 +15,29 @@ class LocationDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = Location.fetchByID(_locationID);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(location.name),
-      ),
-      body: SingleChildScrollView(
-      child: ConstrainedBox(
-      constraints: BoxConstraints(
-    ),
-    child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ImageBanner(location.imagePath),
-          ]..addAll(textSections(context, location))),
-      )
+    return ScopedModelDescendant<NameModel>(
+        builder: (BuildContext context, Widget child, NameModel model)
+    {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(location.name),
+          ),
+          body: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ImageBanner(location.imagePath),
+                    ]
+                      ..addAll(textSections(context, location))),
+              )
 
-    )
+          )
+      );
+    }
     );
   }
 
