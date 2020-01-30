@@ -46,9 +46,13 @@ class FormScreen extends State<Login> {
             margin: EdgeInsets.all(24),
             child: Form(
                 key: _formKey,
-                child: Column(
+                child: ListView(
+                children: [
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Image.network('https://media.giphy.com/media/3DnDRfZe2ubQc/giphy.gif'),
+                    SizedBox(height: 100),
                     _getNameField(),
                     SizedBox(height: 100,),
                     RaisedButton(
@@ -64,6 +68,8 @@ class FormScreen extends State<Login> {
                     )
                   ],
 
+                ),
+                ]
                 )
             ),
           )
