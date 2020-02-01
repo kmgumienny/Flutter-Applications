@@ -28,6 +28,7 @@ class FormScreen extends State<Login> {
         return null;
       },
       onSaved: (String value) {
+        _name = value;
       },
     );
   }

@@ -1,6 +1,6 @@
-# cleaning_app
+# cleaning_app2
 
-A flutter application with details on cleanings
+Cleaning Application
 
 ## Getting Started
 

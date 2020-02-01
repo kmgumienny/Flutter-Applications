@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           screen = LocationDetail(arguments['id']);
           break;
         case '/detailDescription':
-          screen = DetailDescription(arguments['locationID'], arguments['cleaningID']);
+          screen = DetailDescription(arguments['locationID'], arguments['cleaningID'], arguments['name']);
           break;
         default:
           return null;

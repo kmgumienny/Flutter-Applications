@@ -1,4 +1,4 @@
-import 'package:touristapp/models/DetailDescription.dart';
+import 'DetailDescription.dart';
 
 class LocationCleaning {
   int id;
