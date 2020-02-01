@@ -8,12 +8,12 @@ import 'package:intl/intl.dart';
 import '../../models/Cleaner.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../utils/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DetailDescription extends StatefulWidget{
   final int _location_ID;
   final int _cleaningID;
-  final String _name;
-  const DetailDescription(this._location_ID, this._cleaningID, this._name);
+  const DetailDescription(this._location_ID, this._cleaningID);
   @override
   State<StatefulWidget> createState(){
     return Description();
@@ -25,7 +25,7 @@ class Description extends State<DetailDescription> {
   List<Cleaner> cleanerList;
   var count = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
-  String name;
+  String uid;
 
   @override
   Widget build(BuildContext context) {
@@ -53,25 +53,15 @@ class Description extends State<DetailDescription> {
                         child: RaisedButton(
                             onPressed: () {
                               setState(() {
-                                name = '${model.name}';
-                                saveCleaning(name);
+                                uid = '${model.name}';
+                                saveCleaning(uid);
                               }
                               );
                             },
                             child: Text('Complete?'))),
                           new Expanded(
                             child: getCleaningListView(),),
-
-//                    ListView(
-//                        children: cleanerList
-//                            .map((element) => Card(
-//                          child: Column(
-//                            children: <Widget>[
-//                              Text(element)
-//                            ],
-//                          ),
-//                        ))
-//                            .toList()),
+                    
                   ]
               )
           );
@@ -88,25 +78,33 @@ class Description extends State<DetailDescription> {
         setState(() {
           this.cleanerList = cleanerList;
           this.count = cleanerList.length;
-//            for (int i = 0; i < count; i++){
-//              print(cleanerList[i]);
-//            }
         });
       });
     });
   }
 
+  Future<String> firebaseGetUser(String uid) async {
+    String name = "null";
+    await Firestore.instance
+        .collection('users')
+        .document(uid)
+        .get()
+        .then((DocumentSnapshot ds) {
+      if (ds.exists) {
+        print(ds.data['name'].toString());
+        name = ds.data['name'].toString();
+      }
+      else {
+        print("No such user");
+      }
+    });
+    return name;
+  }
+
   ListView getCleaningListView() {
 
-
     TextStyle titleStyle = Theme.of(context).textTheme.subhead;
-//    if (count == 0)
-//      return Text;
-//    else {
-      for (int i = 0; i < count; i++) {
-        databaseHelper.deleteCleaning(i);
-      }
-//    }
+
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
@@ -121,16 +119,36 @@ class Description extends State<DetailDescription> {
     );
   }
 
-  void saveCleaning(String username) async {
+// Poor mans way of clearing the database.
+//  void saveCleaning(String uid) async {
+//    for (int i = 0; i < count; i++){
+//      databaseHelper.deleteCleaning(cleanerList[i].id);
+//    }
+//  }
+  void saveCleaning(String uid) async {
+    //    String username = await firebaseGetUser(uid);
+    await firebaseGetUser(uid).then((username) => {
+      saveToDatabase(username),});
+  }
 
+  void saveToDatabase(String username) async {
     int result;
     var now = DateFormat.yMMMd("en_US").format(DateTime.now());
     String cleaning = "Completed on " + now + " by " + username;
     Cleaner newCleaning = Cleaner(username, cleaning);
     result = await databaseHelper.insertCleaning(newCleaning);
 
-
-    if (result == 0) {
+    if (result != 0) {
+      AlertDialog alertDialog = AlertDialog(
+        title: Text("Cleaning saved."),
+        content: Text("Succesfully added cleaning to sqllite"),
+      );
+      showDialog(
+          context: context,
+          builder: (_) => alertDialog
+      );
+    }
+    else if (result == 0) {
       AlertDialog alertDialog = AlertDialog(
         title: Text("Cleaning not saved."),
         content: Text("There was an error saving the cleaning."),
@@ -141,7 +159,6 @@ class Description extends State<DetailDescription> {
       );
     }
     updateCleanerList();
-
   }
 
 }

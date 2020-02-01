@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../models/Name.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 
 
@@ -14,6 +16,7 @@ class Login extends StatefulWidget {
 class FormScreen extends State<Login> {
 
   var _name;
+  var _uid;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -31,6 +34,21 @@ class FormScreen extends State<Login> {
         _name = value;
       },
     );
+  }
+
+
+  Future<void> saveToFirebase(NameModel model) async {
+    Firestore.instance
+        .collection('users')
+        .add({
+      "name": _name,
+    }).then((result) => {
+      _uid = result.documentID,
+      model.updateName(_uid),
+    _onLocationTap(context, 'hi'),
+    });
+
+
   }
 
 
@@ -63,8 +81,7 @@ class FormScreen extends State<Login> {
                           if (!_formKey.currentState.validate()) {
                             return;
                           }
-                          model.updateName(_name);
-                          _onLocationTap(context, 'hi');
+                          saveToFirebase(model);
                         }
                     )
                   ],
@@ -80,7 +97,6 @@ class FormScreen extends State<Login> {
   }
 
   _onLocationTap(BuildContext context, String locationID) {
-    Navigator.pushNamed(context, '/location',
-        arguments: {"name": _name});
+    Navigator.pushNamed(context, '/location',);
   }
 }

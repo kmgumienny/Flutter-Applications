@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "196152928970",
+    "firebase_url": "https://flutter-cs4518.firebaseio.com",
+    "project_id": "flutter-cs4518",
+    "storage_bucket": "flutter-cs4518.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196152928970:android:baf2d4dac81c64d289a233",
+        "android_client_info": {
+          "package_name": "com.thetachi.cleaning_app2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196152928970-qh6tg10r2gpj7ctu5lbjq6b6duajjt96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf6pdKAc61RPnCwLkAbg3iejXHMnKRDec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196152928970-qh6tg10r2gpj7ctu5lbjq6b6duajjt96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,6 @@
 # cleaning_app2
 
-Cleaning Application
+A new Flutter application.
 
 ## Getting Started
 
